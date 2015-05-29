@@ -44,6 +44,8 @@ Puppet::Type.type(:httpauth).provide(:httpauth) do
             @htauth = WEBrick::HTTPAuth::Htdigest.new(file)
         elsif resource[:mechanism] == :basic
             @htauth = WEBrick::HTTPAuth::Htpasswd.new(file)
+        else resource[:mechanism] == :sha
+            @htauth = WEBrick::HTTPAuth::Htpasswd.new(file)
         end
     end
 
@@ -54,6 +56,8 @@ Puppet::Type.type(:httpauth).provide(:httpauth) do
         elsif resource[:mechanism] == :basic
             # Can't ask webbrick as it uses a random seed
             password.crypt(cp[0,2]) == cp
+        else resource[:mechanism] == :sha
+            WEBrick::HTTPAuth::ShaAuth.make_passwd(realm, user, password) == cp
         end
     end
 end

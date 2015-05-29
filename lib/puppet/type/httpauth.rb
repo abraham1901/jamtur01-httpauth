@@ -43,7 +43,7 @@ Puppet::Type.newtype(:httpauth) do
     newparam(:mechanism) do
        desc "The authentication mechanism to use - either basic or digest. Default to basic."
        
-       newvalues(:basic, :digest)
+       newvalues(:basic, :digest, :sha)
       
        defaultto :basic
     end
